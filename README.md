@@ -4,7 +4,7 @@ To start project run the following:
 
 `yarn && yarn start`
 
-To change commands, edit the src/inputs/index.txt file, all while ensuring the structure stays the same
+To change commands, edit the `src/inputs/index.txt` file, all while ensuring the structure stays the same
 
 ## Assumptions
 
