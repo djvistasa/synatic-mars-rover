@@ -1,0 +1,17 @@
+{
+  "name": "mars-rover",
+  "version": "1.0.0",
+  "description": "Synatic take home assessment",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "npm run build && node build/index.js",
+    "build": "rm -rf ./build && tsc"
+  },
+  "author": "Sive Mwanda",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.11.9",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.3"
+  }
+}
