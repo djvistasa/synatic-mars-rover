@@ -1,8 +1,9 @@
-import { readFileSync } from 'node:fs';
-import { Position, Size, AxisAndAction } from './interfaces';
-import { Command, Action, Direction } from './enums';
+import { readFileSync } from "node:fs";
+import { Position, Size, AxisAndAction } from "./interfaces";
+import { Command, Action, Direction } from "./enums";
+import { rotateLeftDictionary, rotateRightDictionary } from "./utils";
 
-const PUT_OF_BOUNDS_ERROR = 'Rover is out of bounds';
+const OUT_OF_BOUNDS_ERROR = "Rover is out of bounds";
 
 function isRoverOutOfBounds(gridSize: Size, roverPosition: Position): boolean {
   const maxX = gridSize.x;
@@ -18,62 +19,32 @@ function isRoverOutOfBounds(gridSize: Size, roverPosition: Position): boolean {
   return isWithinXAxisBounds && isWithinYAxisBounds;
 }
 
-function rotateRight(direction: Direction): Direction {
-  switch (direction) {
-    case Direction.North:
-      return Direction.East;
-    case Direction.East:
-      return Direction.South;
-    case Direction.South:
-      return Direction.West;
-    case Direction.West:
-      return Direction.North;
-    default:
-      return Direction.North;
-  }
-}
-
-function rotateLeft(direction: Direction): Direction {
-  switch (direction) {
-    case Direction.North:
-      return Direction.West;
-    case Direction.West:
-      return Direction.South;
-    case Direction.South:
-      return Direction.East;
-    case Direction.East:
-      return Direction.North;
-    default:
-      return Direction.North;
-  }
-}
-
 function getAxisAndActionByDirection(direction: Direction): AxisAndAction {
   switch (direction) {
     case Direction.North:
       return {
-        axis: 'y',
+        axis: "y",
         action: Action.Add,
       };
     case Direction.South:
       return {
-        axis: 'y',
+        axis: "y",
         action: Action.Minus,
       };
     case Direction.West:
       return {
-        axis: 'x',
+        axis: "x",
         action: Action.Minus,
       };
     case Direction.East:
       return {
-        axis: 'x',
+        axis: "x",
         action: Action.Add,
       };
 
     default:
       return {
-        axis: 'x',
+        axis: "x",
         action: Action.Add,
       };
   }
@@ -105,13 +76,13 @@ function translateCommandAndExecute(
     case Command.RotateLeft:
       return {
         ...currentPosition,
-        direction: rotateLeft(currentDirection),
+        direction: rotateLeftDictionary[currentDirection],
       };
 
     case Command.RotateRight:
       return {
         ...currentPosition,
-        direction: rotateRight(currentDirection),
+        direction: rotateRightDictionary[currentDirection],
       };
     case Command.Move:
       return moveForward(currentDirection, currentPosition);
@@ -139,7 +110,7 @@ function driveRover(
     );
 
     if (!isRoverStillInBoundsAFterMOve) {
-      console.log(PUT_OF_BOUNDS_ERROR);
+      console.log(OUT_OF_BOUNDS_ERROR);
 
       break;
     }
@@ -153,9 +124,9 @@ function driveRover(
 function startRover(
   gridSize: Size,
   startingPoint: Position,
-  commands: string = ''
+  commands: string = ""
 ) {
-  const listOfCommands: string[] = commands.split('');
+  const listOfCommands: string[] = commands.split("");
 
   const roverHasBeenPlottedAndIsInBounds = isRoverOutOfBounds(
     gridSize,
@@ -163,28 +134,28 @@ function startRover(
   );
 
   if (!roverHasBeenPlottedAndIsInBounds) {
-    return console.log(PUT_OF_BOUNDS_ERROR);
+    return console.log(OUT_OF_BOUNDS_ERROR);
   }
 
   driveRover(startingPoint, listOfCommands, gridSize);
 }
 
 function initializeMission() {
-  const missionFile = readFileSync('./src/inputs/index.txt', {
-    encoding: 'utf8',
+  const missionFile = readFileSync("./src/inputs/index.txt", {
+    encoding: "utf8",
   });
-  const missionInfo = missionFile.split('\n');
+  const missionInfo = missionFile.split("\n");
 
   const gridSize = missionInfo[0];
   const startingPoint = missionInfo[1];
   const command = missionInfo[2];
 
-  const gridCoords = gridSize.split(' ');
+  const gridCoords = gridSize.split(" ");
 
   const gridX = Number(gridCoords[0]);
   const gridY = Number(gridCoords[1]);
 
-  const startingCoordsAndDirection = startingPoint.split(' ');
+  const startingCoordsAndDirection = startingPoint.split(" ");
   const startingX = Number(startingCoordsAndDirection[0]);
   const startingY = Number(startingCoordsAndDirection[1]);
   const direction = startingCoordsAndDirection[2] as Direction;
