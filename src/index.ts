@@ -3,7 +3,7 @@ import { Position, Size, AxisAndAction } from "./interfaces";
 import { Command, Action, Direction } from "./enums";
 import { rotateLeftDictionary, rotateRightDictionary } from "./utils";
 
-const PUT_OF_BOUNDS_ERROR = "Rover is out of bounds";
+const OUT_OF_BOUNDS_ERROR = "Rover is out of bounds";
 
 function isRoverOutOfBounds(gridSize: Size, roverPosition: Position): boolean {
   const maxX = gridSize.x;
@@ -110,7 +110,7 @@ function driveRover(
     );
 
     if (!isRoverStillInBoundsAFterMOve) {
-      console.log(PUT_OF_BOUNDS_ERROR);
+      console.log(OUT_OF_BOUNDS_ERROR);
 
       break;
     }
@@ -134,7 +134,7 @@ function startRover(
   );
 
   if (!roverHasBeenPlottedAndIsInBounds) {
-    return console.log(PUT_OF_BOUNDS_ERROR);
+    return console.log(OUT_OF_BOUNDS_ERROR);
   }
 
   driveRover(startingPoint, listOfCommands, gridSize);
