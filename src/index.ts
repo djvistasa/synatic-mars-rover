@@ -1,7 +1,11 @@
 import { readFileSync } from "node:fs";
-import { Position, Size, AxisAndAction } from "./interfaces";
+import { Position, Size } from "./interfaces";
 import { Command, Action, Direction } from "./enums";
-import { rotateLeftDictionary, rotateRightDictionary } from "./utils";
+import {
+  rotateLeftDictionary,
+  rotateRightDictionary,
+  axisAndDirectionDictionary,
+} from "./utils";
 
 const OUT_OF_BOUNDS_ERROR = "Rover is out of bounds";
 
@@ -19,37 +23,6 @@ function isRoverOutOfBounds(gridSize: Size, roverPosition: Position): boolean {
   return isWithinXAxisBounds && isWithinYAxisBounds;
 }
 
-function getAxisAndActionByDirection(direction: Direction): AxisAndAction {
-  switch (direction) {
-    case Direction.North:
-      return {
-        axis: "y",
-        action: Action.Add,
-      };
-    case Direction.South:
-      return {
-        axis: "y",
-        action: Action.Minus,
-      };
-    case Direction.West:
-      return {
-        axis: "x",
-        action: Action.Minus,
-      };
-    case Direction.East:
-      return {
-        axis: "x",
-        action: Action.Add,
-      };
-
-    default:
-      return {
-        axis: "x",
-        action: Action.Add,
-      };
-  }
-}
-
 function getCoordinateAfterMove(action: Action, coordinate: number) {
   if (action === Action.Minus) {
     return coordinate - 1;
@@ -59,7 +32,7 @@ function getCoordinateAfterMove(action: Action, coordinate: number) {
 }
 
 function moveForward(direction: Direction, position: Position): Position {
-  const { axis, action } = getAxisAndActionByDirection(direction);
+  const { axis, action } = axisAndDirectionDictionary[direction];
 
   position[axis] = getCoordinateAfterMove(action, position[axis]);
 
@@ -88,6 +61,7 @@ function translateCommandAndExecute(
       return moveForward(currentDirection, currentPosition);
 
     default:
+      console.log("Illegal command given");
       return { x: 0, y: 0, direction: Direction.North };
   }
 }
