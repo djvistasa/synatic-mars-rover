@@ -1,4 +1,4 @@
-import { Action, Direction } from '../enums';
+import { Action, Direction } from "../enums";
 interface Size {
   x: number;
   y: number;
@@ -13,4 +13,18 @@ interface AxisAndAction {
   action: Action;
 }
 
-export { Size, Position, AxisAndAction };
+interface RotateDictionary {
+  [key: string]: Direction;
+}
+
+interface AxisAndActionDictionary {
+  [key: string]: AxisAndAction;
+}
+
+export {
+  Size,
+  Position,
+  AxisAndAction,
+  RotateDictionary,
+  AxisAndActionDictionary,
+};
